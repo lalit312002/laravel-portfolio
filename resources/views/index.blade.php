@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 
+    <link rel="shortcut icon" href={{$logo['favicon']->src}} />
+
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -25,30 +28,31 @@
         {{-- {{dd($cards)}} --}}
         <div class="container-fluid">
             <a class="navbar-brand" href="https://randall.qodeinteractive.com/">
-                <img src={{$logo->logo}} alt=""
+                <img src={{url($logo['logo']->src)}} alt=""
                     width="30" height="24">
             </a>
+            {{-- {{dd($logo);}} --}}
 
             <div class="d-flex justify-content-end">
                 @if (Route::has('login'))
                 <div class=" d-flex nav-item">
                     {{-- navbar-nav me-auto mb-2 mb-lg-0   ,  nav-item--}}
                     @auth
-                    {{-- <a href="{{ url('/home') }}" class="nav-link text-light me-2 ">Home</a> --}}
-                    {{-- <a href="{{ route('logout') }}" class=" nav-link  text-light mx-2">Log out</a> --}}
+                        {{-- <a href="{{ url('/home') }}" class="nav-link text-light me-2 ">Home</a> --}}
+                        {{-- <a href="{{ route('logout') }}" class=" nav-link  text-light mx-2">Log out</a> --}}
 
-                    <a class="nav-link  text-light mx-2" href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                                  document.getElementById('logout-form').submit();">
-                     {{ __('Logout') }}
-                     {{-- {{ 'Logout' }} --}}
-                    </a>
+                        <a class="nav-link  text-light mx-2" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                        {{-- {{ 'Logout' }} --}}
+                        </a>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
 
-                    <a href="{{ url('/dashboard') }}" class="nav-link text-light me-2 ">dashboard</a>
+                        <a href="{{ url('/dashboard') }}" class="nav-link text-light me-2 ">dashboard</a>
                     @else
                         <a href="{{ route('login') }}" class=" nav-link  text-light mx-2">Log in</a>
 
@@ -92,6 +96,8 @@
     
 
     <div class="container">
+        {{-- {{dd($cards)}} --}}
+
         @foreach ($cards as $card)
 
         <div class=" panel">
@@ -116,100 +122,7 @@
             
         @endforeach
 
-        {{-- <div class=" panel">
-
-            <h1 class="my-4 text-center">commercial </h1>
-            <div class="d-flex align-items-center justify-content-center">
-                <img src="https://randall.qodeinteractive.com/wp-content/uploads/2023/04/horizontal-gallery-img1.jpg"
-                    class="rounded" width="60%" height="100%" alt="...">
-            </div>
-
-            <div class="text-center">
-                <h2 class="mt-5">3D Cel Motion</h2>
-
-                <h3>3D Cel Motion <br />Capture
-                    &amp; Stop Motion </h3>
-
-                <p class="">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia cupiditate amet quaerat veniam
-                    eius, veritatis fugiat doloribus corporis ex dicta nobis non tempora? Assumenda, voluptatum. Facilis
-                    saepe laboriosam ad consectetur.
-                </p>
-            </div>
-
-        </div>
-
-        <div class=" panel" style="background-color: rgb(239, 147, 121);">
-
-            <h1 class="my-4 text-center">Modeling </h1>
-            <div class="d-flex align-items-center justify-content-center">
-
-                <img src="https://randall.qodeinteractive.com/wp-content/uploads/2023/04/horizontal-gallery-img3.jpg"
-                    class="rounded" width="60%" height="70%" alt="...">
-            </div>
-
-            <div class="text-center">
-                <!-- <h5 style="writing-mode: vertical-tb; text-align:center  ; ">hello</h5> -->
-                <h2 class="mt-5">3D Modeling</h2>
-                <h3>3D Modeling </h3>
-
-                <p class="text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia cupiditate amet quaerat veniam
-                    eius, veritatis fugiat doloribus corporis ex dicta nobis non tempora? Assumenda, voluptatum. Facilis
-                    saepe laboriosam ad consectetur.
-                </p>
-            </div>
-
-        </div>
-
-        <div class=" panel">
-
-            <h1 class="my-4 text-center">Commercial</h1>
-            <div class="d-flex align-items-center justify-content-center">
-
-                <img src="https://randall.qodeinteractive.com/wp-content/uploads/2023/04/horizontal-gallery-img2.jpg"
-                    class="rounded" width="60%" height="70%" alt="...">
-            </div>
-
-            <div class="text-center">
-                <h2 class="mt-5">Capture
-                    &amp; Stop Motion</h2>
-
-                <h3>3D Cel Motion <br />Capture
-                    &amp; Stop Motion </h3>
-
-                <p class="text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia cupiditate amet quaerat veniam
-                    eius, veritatis fugiat doloribus corporis ex dicta nobis non tempora? Assumenda, voluptatum. Facilis
-                    saepe laboriosam ad consectetur.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class=" panel" style="background-color: rgb(239, 147, 121);">
-
-            <h1 class="my-4 text-center">Animation </h1>
-            <div class="d-flex align-items-center justify-content-center">
-
-                <img src="https://randall.qodeinteractive.com/wp-content/uploads/2023/04/horizontal-gallery-img4.jpg"
-                    class="rounded" width="60%" height="70%" alt="...">
-            </div>
-
-            <div class="text-center">
-                <h2 class="mt-5">Animation &amp; Motion </h2>
-
-                <h3>Animation &amp; Motion </h3>
-
-                <p class="text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia cupiditate amet quaerat veniam
-                    eius, veritatis fugiat doloribus corporis ex dicta nobis non tempora? Assumenda, voluptatum. Facilis
-                    saepe laboriosam ad consectetur.
-                </p>
-            </div>
-
-        </div> --}}
+      
 
     </div>
 

@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class logo extends Model
 {
     use HasFactory;
+
+
+    public $timestamps = false;
+
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'mobile',
+    //     'message',
+    // ];
 }

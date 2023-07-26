@@ -323,7 +323,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements">Basic Elements</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/showContactUsData">Contact Us Data</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/showUpdateData">Update Data</a></li>
               </ul>
             </div>
           </li>
@@ -1022,7 +1023,7 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="table-responsive">
-                        <table id="example" class="display expandable-table" style="width:100%">
+                        <table  class="display expandable-table" style="width:100%">
                           <thead>
                             <tr>
                               <th>Quote#</th>

@@ -38,5 +38,8 @@ Route::get('/dashboard', [Controller::class,'showDash']);
 
 Route::group(['middleware'=>['isAdmin']],function(){
     Route::get('/admin-panel', [Controller::class,'showAdminPanel'])->name('admin');
+    Route::get('/admin/showContactUsData', [Controller::class,'showContactUsData']);
+    Route::get('/admin/showUpdateData', [Controller::class,'showUpdateData']);
+    Route::post('/admin/storeUpdateData', [Controller::class,'storeUpdateData']);
 });
 

@@ -26,7 +26,11 @@ class Controller extends BaseController
         //     dd($e);
         // }
         return view('index',['cards'=>card::get(),
-        'logo'=>logo::where('id','1')->first()]);
+        'logo'=>[
+            'logo'=>logo::where('name','logo')->first(),
+            'favicon'=>logo::where('name','favicon')->first()
+            ]
+        ]);
 
     }
 
@@ -74,7 +78,84 @@ class Controller extends BaseController
         return $redirect;
     }
 
+
+    // admin controller
+
     public function showAdminPanel(){
         return view('admin.admin-panel');
+    }
+
+    public function showUpdateData(){
+        return view('admin.updateData');
+    }
+
+    public function showContactUsData(){
+
+        return view('admin.contactUsData',['data'=>contactUs::get()]);
+    }
+
+    public function storeUpdateData(Request $request){
+        $formFields=$request->validate([
+            "id"=>"",
+            "title"=>"",
+            "description"=>"",
+        ]);
+
+        if($request->has('id')&& $request['id']!=""){
+
+            $card=card::find($request['id']);
+
+            if($request->has('title')&& $request['title']!=""){
+                $card->title=$formFields['title'];
+            }
+            if($request->has('description') && $request['description']!=""){
+                $card->description=$request['description'];
+            }
+            // $card->update($formFields);
+            // dd($card);
+            
+            
+            if($request->has('cardImg')){
+                $filename="";
+                $filename=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->cardImg->extension(); 
+                $request->cardImg->move(public_path('/assets/img/'),$filename);
+                
+                $card->img=$filename;
+                // dd($filename);
+            }
+            $card->save();
+        }
+
+        if($request->has('logo')){
+            $filename="";
+            $filename=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->logo->extension(); 
+            $request->logo->move(public_path('/assets/img/'),$filename);
+
+            $logo=logo::where('name','logo')->first();
+            $logo->src=$filename;
+            
+            $logo->save();
+            // dd($filename);
+        }
+        if($request->has('favicon')){
+            $file="";
+            $file=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->favicon->extension(); 
+            $request->favicon->move(public_path('/assets/img/'),$file);
+
+            $favicon=logo::where('name','favicon')->first();
+            $favicon->src=$file;
+            
+            $favicon->save();
+            // dd($filename);
+        }
+
+        // if($request->has('favicon')){
+        //     $favicon=logo::where('name','favicon')->first();
+        //     $favicon->src=$request['favicon'];
+        //     $favicon->save();
+        // }
+
+
+        return redirect('/')->with('message','success');
     }
 }
