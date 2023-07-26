@@ -21,7 +21,7 @@
 
 <body>
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark ">
         {{-- {{dd($cards)}} --}}
         <div class="container-fluid">
             <a class="navbar-brand" href="https://randall.qodeinteractive.com/">
@@ -30,6 +30,35 @@
             </a>
 
             <div class="d-flex justify-content-end">
+                @if (Route::has('login'))
+                <div class=" d-flex nav-item">
+                    {{-- navbar-nav me-auto mb-2 mb-lg-0   ,  nav-item--}}
+                    @auth
+                    {{-- <a href="{{ url('/home') }}" class="nav-link text-light me-2 ">Home</a> --}}
+                    {{-- <a href="{{ route('logout') }}" class=" nav-link  text-light mx-2">Log out</a> --}}
+
+                    <a class="nav-link  text-light mx-2" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                                  document.getElementById('logout-form').submit();">
+                     {{ __('Logout') }}
+                     {{-- {{ 'Logout' }} --}}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+
+                    <a href="{{ url('/dashboard') }}" class="nav-link text-light me-2 ">dashboard</a>
+                    @else
+                        <a href="{{ route('login') }}" class=" nav-link  text-light mx-2">Log in</a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class=" nav-link  text-light me-2">Register</a>
+                        @endif
+                    @endauth
+                </div>
+                @endif
+
                 <button class="navbar-toggler  me-2" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarToggleExternalContent">
                     <span class="navbar-toggler-icon"></span>
