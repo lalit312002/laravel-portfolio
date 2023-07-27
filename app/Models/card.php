@@ -14,6 +14,8 @@ class card extends Model
     protected $fillable = [
         'id',
         'title',
-        'discription',
+        'subtitle',
+        'description',
+        'img'
     ];
 }

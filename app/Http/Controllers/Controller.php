@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\File;
 
 class Controller extends BaseController
 {
@@ -85,13 +86,57 @@ class Controller extends BaseController
         return view('admin.admin-panel');
     }
 
-    public function showUpdateData(){
-        return view('admin.updateData');
+    
+    public function showUpdateCards(){
+        return view('admin.showUpdateCards',['cards'=>card::get(),
+        'logo'=>[
+            'logo'=>logo::where('name','logo')->first(),
+            'favicon'=>logo::where('name','favicon')->first()
+            ]
+        ]);
     }
+    
+    public function showUpdateData(card $id){
+        // dd($id);
+        return view('admin.updateData',[
+            'card'=>$id,
+        ]);
+    }
+
+    public function createCard() {
+        return view('admin.createCard');
+    }
+
+    public function updateLogo() {
+        return view('admin.updateLogo');
+    }
+
 
     public function showContactUsData(){
 
         return view('admin.contactUsData',['data'=>contactUs::get()]);
+    }
+
+    public function storeCardData(Request $request){
+        // dd($request->all());
+        $formFields=$request->validate([
+            "title"=>"required",
+            "subtitle"=>"required",
+            "description"=>"required",
+            // "cardImg"=>"required"
+        ]);
+
+         
+        if($request->has('cardImg')){
+            $filename= 'assets/img/' . time() . '.' .$request->cardImg->extension(); 
+            $request->cardImg->move(public_path('assets/img/'),$filename);
+            
+            $formFields['img']=$filename;
+            // dd($filename);
+        }
+        card::create($formFields);
+
+        return redirect('/admin/showUpdateCards');
     }
 
     public function storeUpdateData(Request $request){
@@ -101,9 +146,14 @@ class Controller extends BaseController
             "description"=>"",
         ]);
 
-        if($request->has('id')&& $request['id']!=""){
+        // dd($request->all());
+
+        if($request->has('id')&& $request['id']!="" ){
 
             $card=card::find($request['id']);
+
+            // $card->update($formFields);
+
 
             if($request->has('title')&& $request['title']!=""){
                 $card->title=$formFields['title'];
@@ -116,46 +166,72 @@ class Controller extends BaseController
             
             
             if($request->has('cardImg')){
-                $filename="";
-                $filename=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->cardImg->extension(); 
-                $request->cardImg->move(public_path('/assets/img/'),$filename);
-                
+                $filename=$request->cardImg->getFilename();
+                $filename=explode('.',$filename);
+                $filename='assets/img/' . $filename['0'] . time() . '.' .$request->cardImg->extension(); 
+                $request->cardImg->move(public_path('assets/img/'),$filename);
+
+                $destination=$card->img;
+                if(File::exists($destination)){
+                    File::delete($destination);
+                }
                 $card->img=$filename;
                 // dd($filename);
             }
             $card->save();
         }
 
-        if($request->has('logo')){
-            $filename="";
-            $filename=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->logo->extension(); 
-            $request->logo->move(public_path('/assets/img/'),$filename);
 
+
+        return redirect('/admin/showUpdateCards')->with('message','success');
+    }
+
+    public function storeUpdateLogo(Request $request){
+        if($request->has('logo')){
+            
             $logo=logo::where('name','logo')->first();
+            
+            $destination=$logo->src;
+            if(File::exists($destination)){
+                File::delete($destination);
+            }
+        
+            $filename= 'assets/img/' . 'logo' . '.' . $request->favicon->extension(); 
+            $request->logo->move(public_path('assets/img/'),$filename);
             $logo->src=$filename;
             
             $logo->save();
-            // dd($filename);
         }
-        if($request->has('favicon')){
-            $file="";
-            $file=$request->getSchemeAndHttpHost() . '/assets/img/' . time() . '.' .$request->favicon->extension(); 
-            $request->favicon->move(public_path('/assets/img/'),$file);
 
+        if($request->has('favicon')){
+            
+            
             $favicon=logo::where('name','favicon')->first();
-            $favicon->src=$file;
+            $destination=$favicon->src;
+            if(File::exists($destination)){
+                File::delete($destination);
+            }
+            
+            $filename='assets/img/' .'favicon' . '.' . $request->favicon->extension(); 
+            $request->favicon->move('assets/img/',$filename);
+            $favicon->src=$filename;
             
             $favicon->save();
-            // dd($filename);
         }
 
-        // if($request->has('favicon')){
-        //     $favicon=logo::where('name','favicon')->first();
-        //     $favicon->src=$request['favicon'];
-        //     $favicon->save();
-        // }
+        return redirect('/admin/showUpdateCards')->with('message','success');
+    }
 
+    public function deleteCardData(card $card){
+        // $destination=explode('img/',$card->img);
+        // $destination=end($destination);
+        $destination=$card->img;
+        if(File::exists($destination)){
+            File::delete($destination);
+        }
+        $card->delete();
 
-        return redirect('/')->with('message','success');
+        return back()->with('message','success');
+
     }
 }

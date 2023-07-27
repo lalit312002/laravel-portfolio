@@ -12,10 +12,8 @@ class logo extends Model
 
     public $timestamps = false;
 
-    // protected $fillable = [
-    //     'name',
-    //     'email',
-    //     'mobile',
-    //     'message',
-    // ];
+    protected $fillable = [
+        'name',
+        'src',
+    ];
 }

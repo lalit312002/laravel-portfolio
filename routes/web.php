@@ -39,7 +39,14 @@ Route::get('/dashboard', [Controller::class,'showDash']);
 Route::group(['middleware'=>['isAdmin']],function(){
     Route::get('/admin-panel', [Controller::class,'showAdminPanel'])->name('admin');
     Route::get('/admin/showContactUsData', [Controller::class,'showContactUsData']);
-    Route::get('/admin/showUpdateData', [Controller::class,'showUpdateData']);
-    Route::post('/admin/storeUpdateData', [Controller::class,'storeUpdateData']);
+    Route::get('/admin/showUpdateData/{id}', [Controller::class,'showUpdateData']);
+    Route::get('/admin/showUpdateCards', [Controller::class,'showUpdateCards']);
+    Route::get('/admin/createCard', [Controller::class,'createCard']);
+    Route::get('/admin/updateLogo', [Controller::class,'updateLogo']);
+
+    Route::put('/admin/storeUpdateData', [Controller::class,'storeUpdateData']);
+    Route::put('/admin/storeUpdateLogo', [Controller::class,'storeUpdateLogo']);
+    Route::post('/admin/storeCardData', [Controller::class,'storeCardData']);
+    Route::delete('/admin/deleteCardData/{card}', [Controller::class,'deleteCardData']);
 });
 

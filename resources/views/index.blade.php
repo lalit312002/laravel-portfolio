@@ -96,7 +96,7 @@
     
 
     <div class="container">
-        {{-- {{dd($cards)}} --}}
+    
 
         @foreach ($cards as $card)
 
