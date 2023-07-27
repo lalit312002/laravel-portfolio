@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,12 +23,10 @@ Route::get('/welcome', function () {
 // Route::get('/', function () {
 //     return view('index');
 // });
-Route::get('/',[Controller::class,'show']);
+Route::get('/',[Controller::class,'index']);
 
 Route::get('/contactUs',[Controller::class,'showContactUs']);
 Route::post('/contactUs',[Controller::class,'storeContactUs']);
-
-
 
 Auth::routes();
 
@@ -35,18 +34,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/dashboard', [Controller::class,'showDash']);
 
+// 'prefix' => 'admin',
 
-Route::group(['middleware'=>['isAdmin']],function(){
-    Route::get('/admin-panel', [Controller::class,'showAdminPanel'])->name('admin');
-    Route::get('/admin/showContactUsData', [Controller::class,'showContactUsData']);
-    Route::get('/admin/showUpdateData/{id}', [Controller::class,'showUpdateData']);
-    Route::get('/admin/showUpdateCards', [Controller::class,'showUpdateCards']);
-    Route::get('/admin/createCard', [Controller::class,'createCard']);
-    Route::get('/admin/updateLogo', [Controller::class,'updateLogo']);
+Route::group(['prefix' => 'admin','middleware'=>['web','isAdmin']],function(){
+    Route::get('/panel', [AdminController::class,'AdminPanel'])->name('admin');
+    Route::get('/showContactUsData', [AdminController::class,'ContactUsData']);
+    Route::get('/showUpdateData/{id}', [AdminController::class,'UpdateData']);
+    Route::get('/showUpdateCards', [AdminController::class,'UpdateCards']);
+    Route::get('/createCard', [AdminController::class,'createCard']);
+    Route::get('/updateLogo', [AdminController::class,'updateLogo']);
 
-    Route::put('/admin/storeUpdateData', [Controller::class,'storeUpdateData']);
-    Route::put('/admin/storeUpdateLogo', [Controller::class,'storeUpdateLogo']);
-    Route::post('/admin/storeCardData', [Controller::class,'storeCardData']);
-    Route::delete('/admin/deleteCardData/{card}', [Controller::class,'deleteCardData']);
+    Route::put('/storeUpdateData', [AdminController::class,'storeUpdateData']);
+    Route::put('/storeUpdateLogo', [AdminController::class,'storeUpdateLogo']);
+    Route::post('/storeCardData', [AdminController::class,'storeCardData']);
+    Route::delete('/deleteCardData/{card}', [AdminController::class,'deleteCardData']);
 });
 
