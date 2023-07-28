@@ -10,7 +10,6 @@
     <link rel="shortcut icon" href={{url('assets/img/favicon.png')}} />
 
 
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
@@ -46,12 +45,14 @@
         <div class=" panel">
             <div class="d-flex align-items-center justify-content-center">
                 <a href='/admin/showUpdateData/{{$card->id}}' class="btn btn-primary mt-3 ">Edit</a>
-                {{-- <a href='/admin/deleteCardData/{{$card->id}}' class="btn btn-primary mt-3 ">delete</a> --}}
-                <form method="POST" action="/admin/deleteCardData/{{$card->id}}">
+                {{-- <a href='/admin/deleteCardData/{{$card->id}}' onclick=" return confirm('are you sure')" class="btn btn-danger mt-3 mx-3 ">delete</a> --}}
+              
+                <form id="delete-form-{{$card->id}}" method="POST" action="/admin/deleteCardData/{{$card->id}}">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger mt-3 mx-3"><i class=""></i> Delete</button>
-                  </form>
+                    <a  href='/admin/deleteCardData/{{$card->id}}' class="btn btn-danger mt-3 mx-3" onclick=" deleteIt(event,{{$card->id}});"><i class=""></i> Delete</a>
+                </form>
+                
             </div>
 
             <h1 class="my-4 text-center">{{$card->title}} </h1>
@@ -82,6 +83,43 @@
 
 
     <script src={{url("javascript.js")}}></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+         function deleteIt(e,id){
+            e.preventDefault();
+            let urlToRidirect=e.currentTarget.getAttribute('href');
+            urlToRidirect=`/admin/deleteCardData/${id}`;
+            console.log(`${id}ii`,urlToRidirect,document.querySelector('input[name="_token"]').value);
+
+            swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                swal("Poof! Your  file has been deleted!", {
+                    icon: "success",
+                });
+                // window.location.href='/admin/showUpdateCards';
+                // response=fetch(`urlToRidirect`,{
+                // method: 'DELETE',
+                // headers: { 
+                //     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                //     'Content-Type': 'application/json' },
+                
+                // }).then((response) => response.json())  ;
+                document.getElementById(`delete-form-${id}`).submit();
+                
+
+            } else {
+                swal("Your file is safe!");
+            }
+        });
+         }
+    </script>
+
 
 
 </body>
